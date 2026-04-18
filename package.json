@@ -1,0 +1,73 @@
+{
+  "name": "@msobiecki/cookie-store",
+  "version": "1.0.0",
+  "private": false,
+  "description": "",
+  "keywords": [
+    "react",
+    "pointer",
+    "mouse",
+    "touch",
+    "keyboard",
+    "events",
+    "hotkeys",
+    "shortcuts"
+  ],
+  "homepage": "https://github.com/msobiecki/cookie-store",
+  "bugs": {
+    "url": "https://github.com/msobiecki/cookie-store/issues"
+  },
+  "repository": {
+    "url": "git://git@github.com/msobiecki/cookie-store.git"
+  },
+  "license": "MIT",
+  "author": "Michał Sobiecki <kontakt@codeshaker.pl>",
+  "type": "module",
+  "engines": {
+    "node": ">=22.17.1"
+  },
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "test": "vitest",
+    "lint": "eslint",
+    "prepare": "husky"
+  },
+  "optionalDependencies": {
+    "express": "^5.2.1",
+    "next": "^16.2.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@anolilab/multi-semantic-release": "^4.1.1",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "@msobiecki/eslint-config": "^9.12.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react-swc": "^4.2.3",
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "jsdom": "^28.1.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "semantic-release": "^25.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.0.18"
+  },
+  "packageManager": "npm@10.9.2"
+}
