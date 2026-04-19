@@ -17,6 +17,12 @@ const getCookieStore = createCookieStore({ adapter: "express" });
 router.get("/", async (request, response) => {
   const cookieStore = await getCookieStore(request, response);
 
+  await cookieStore.set("theme", "like", {
+    path: "/",
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // 1 day
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
+  });
+
   const theme = await cookieStore.get("theme");
   if (theme) {
     return response.json({ message: `Current theme is ${theme}` });

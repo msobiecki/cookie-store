@@ -1,22 +1,26 @@
-import { useCallback } from "react";
+"use client";
+
+import { useMemo, useCallback } from "react";
+
+import { type CookieOptions } from "../types/cookies";
 
 import { useCookies } from "./use-cookies";
 
-export function useCookie(name: string) {
+export function useCookie(name: string, options?: CookieOptions) {
   const { get, set, remove } = useCookies();
 
-  const value = useCallback(() => get(name), [name, get]);
+  const value = useMemo(() => get(name), [name, get]);
 
   const setValue = useCallback(
-    (newValue: string) => {
-      set(name, newValue);
+    async (newValue: string) => {
+      await set(name, newValue, options);
     },
-    [name, set],
+    [name, set, options],
   );
 
-  const removeValue = useCallback(() => {
-    remove(name);
-  }, [name, remove]);
+  const removeValue = useCallback(async () => {
+    await remove(name, options);
+  }, [name, remove, options]);
 
   return [value, setValue, removeValue] as const;
 }

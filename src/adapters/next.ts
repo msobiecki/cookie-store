@@ -1,16 +1,10 @@
 import { type CookieStore, type CookieOptions } from "../types/cookies";
 
-function normalizeOptions(options: CookieOptions) {
-  return {
-    ...options,
-    expires:
-      typeof options.expires === "number"
-        ? options.expires
-        : (options.expires ?? undefined),
-  };
-}
-
 export async function createNextCookieStore(): Promise<CookieStore> {
+  const defaultOptions = {
+    path: "/",
+  } satisfies CookieOptions;
+
   const { cookies } = await import("next/headers");
   const store = await cookies();
 
@@ -19,12 +13,25 @@ export async function createNextCookieStore(): Promise<CookieStore> {
       return store.get(name)?.value;
     },
 
-    async set(name, value, options = {}) {
-      store.set(name, value, normalizeOptions(options));
+    async set(name, value, optionsOverride) {
+      const options: CookieOptions = {
+        ...defaultOptions,
+        ...optionsOverride,
+      };
+
+      store.set(name, value, options);
     },
 
-    async delete(name) {
-      store.delete(name);
+    async delete(name, optionsOverride) {
+      const options: CookieOptions = {
+        ...defaultOptions,
+        ...optionsOverride,
+      };
+
+      store.delete({
+        name,
+        ...options,
+      });
     },
   };
 }

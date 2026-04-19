@@ -2,7 +2,7 @@
 
 import {
   createContext,
-  ReactNode,
+  type ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -11,13 +11,15 @@ import {
 
 import { createBrowserCookieStore } from "../adapters";
 
+import { type CookieOptions } from "../types/cookies";
+
 type CookieState = Record<string, string | undefined>;
 
 export interface CookieContextValue {
   cookies: CookieState;
   get: (name: string) => string | undefined;
-  set: (name: string, value: string) => Promise<void>;
-  remove: (name: string) => Promise<void>;
+  set: (name: string, value: string, options?: CookieOptions) => Promise<void>;
+  remove: (name: string, options?: CookieOptions) => Promise<void>;
 }
 
 export const CookieContext = createContext<CookieContextValue | null>(null);
@@ -36,8 +38,8 @@ export const CookieProvider = ({
   const get = useCallback((name: string) => cookies[name], [cookies]);
 
   const set = useCallback(
-    async (name: string, value: string) => {
-      await cookieStore.set(name, value);
+    async (name: string, value: string, options?: CookieOptions) => {
+      await cookieStore.set(name, value, options);
 
       setCookies((previous) => ({
         ...previous,
@@ -48,8 +50,8 @@ export const CookieProvider = ({
   );
 
   const remove = useCallback(
-    async (name: string) => {
-      await cookieStore.delete(name);
+    async (name: string, options?: CookieOptions) => {
+      await cookieStore.delete(name, options);
 
       setCookies((previous) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,6 +61,13 @@ export const CookieProvider = ({
     },
     [cookieStore],
   );
+
+  useEffect(() => {
+    (async () => {
+      const all = await cookieStore.getAll?.();
+      if (all) setCookies(all);
+    })();
+  }, [cookieStore]);
 
   useEffect(() => {
     if (!("cookieStore" in globalThis)) {
