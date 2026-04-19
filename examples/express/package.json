@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "tsx ./index.js"
+    "start": "tsx ./lib/index.js"
   },
   "dependencies": {
     "@msobiecki/cookie-store": "file:../../",
@@ -13,6 +13,8 @@
     "http-status": "^2.1.0"
   },
   "devDependencies": {
+    "@msobiecki/eslint-config": "^9.12.0",
+    "eslint": "^9.39.2",
     "tsx": "^4.21.0"
   }
 }

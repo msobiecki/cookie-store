@@ -1,7 +1,7 @@
-import express, { json, urlencoded } from 'express';
-import cookieParser from 'cookie-parser';
+import express, { json, urlencoded } from "express";
+import cookieParser from "cookie-parser";
 
-import indexRouter from './routes/index.js';
+import indexRouter from "./routes/index.js";
 
 /**
  * Main Express application instance.
@@ -16,7 +16,7 @@ app.use(json());
 
 /**
  * Middleware: Parses URL-encoded request bodies (form submissions).
- * 
+ *
  * @param {object} options
  * @param {boolean} options.extended - Allows rich objects and arrays if true
  */
@@ -32,6 +32,6 @@ app.use(cookieParser());
  * Mount root router.
  * All routes defined in indexRouter will be available under "/".
  */
-app.use('/', indexRouter);
+app.use("/", indexRouter);
 
 export default app;
