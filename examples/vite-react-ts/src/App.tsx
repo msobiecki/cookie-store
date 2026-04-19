@@ -8,7 +8,6 @@ import "./App.css";
 
 function App() {
   const [themeCookie, setThemeCookie, removeThemeCookie] = useCookie("theme", {
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // 1 day
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   });
 
