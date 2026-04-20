@@ -9,7 +9,7 @@
     "cookie-store",
     "browser",
     "express",
-    "next",
+    "nextjs",
     "react",
     "typescript"
   ],
