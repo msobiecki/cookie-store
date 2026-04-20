@@ -1,8 +1,12 @@
 # @msobiecki/cookie-store
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/msobiecki/cookie-store/blob/master/LICENSE)
+
 Tiny, typed cookie API that works across browser, Express, and Next.js.
 
-The package provides:
+![cookie-store](./docs/images/logotype.png)
+
+## Features
 
 - One factory to create an adapter-specific cookie store.
 - A Promise-based API with get, set, and delete methods.
