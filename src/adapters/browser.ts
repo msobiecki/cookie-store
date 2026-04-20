@@ -1,5 +1,10 @@
 import { type CookieStore, type CookieOptions } from "../types/cookies";
 
+export interface BrowserCookieStore extends CookieStore {
+  subscribeChange(listener: (event: CookieChangeEvent) => void): void;
+  unsubscribeChange(listener: (event: CookieChangeEvent) => void): void;
+}
+
 function hasCookieStore(): boolean {
   return (
     typeof globalThis !== "undefined" &&
@@ -33,7 +38,6 @@ function normalizeOptions(options: CookieOptions) {
   if (options.sameSite) result.sameSite = options.sameSite;
   if (options.partitioned) result.partitioned = options.partitioned;
   if (options.secure) result.secure = options.secure;
-  if (options.httpOnly) result.httpOnly = options.httpOnly;
   if (expires !== undefined) result.expires = expires;
   if (maxAge !== undefined) result.maxAge = maxAge;
 
@@ -62,7 +66,7 @@ function formatDocumentCookieExpires(expires: number) {
   return date.toUTCString();
 }
 
-export function createBrowserCookieStore(): CookieStore {
+export function createBrowserCookieStore(): BrowserCookieStore {
   const defaultOptions = {
     path: "/",
   } satisfies CookieOptions;

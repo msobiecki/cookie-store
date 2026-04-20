@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 
-import { type CookieStore, type CookieOptions } from "../types/cookies";
+import { type CookieOptions } from "../types/cookies";
 
 import { createCookieStore } from "../store";
 
@@ -32,7 +32,9 @@ export const CookieProvider = ({
   children: ReactNode;
   initialCookies?: Record<string, string>;
 }) => {
-  const [cookieStore, setCookieStore] = useState<CookieStore | null>(null);
+  const [cookieStore, setCookieStore] = useState<Awaited<
+    ReturnType<typeof getCookieStore>
+  > | null>(null);
   const [cookies, setCookies] = useState<CookieState>(initialCookies);
 
   const get = useCallback((name: string) => cookies[name], [cookies]);
@@ -110,11 +112,11 @@ export const CookieProvider = ({
     };
 
     // eslint-disable-next-line compat/compat
-    cookieStore.subscribeChange?.(handler);
+    cookieStore.subscribeChange(handler);
 
     return () => {
       // eslint-disable-next-line compat/compat
-      cookieStore.unsubscribeChange?.(handler);
+      cookieStore.unsubscribeChange(handler);
     };
   }, [cookieStore]);
 

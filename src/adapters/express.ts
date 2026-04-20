@@ -6,7 +6,30 @@ import {
 
 import { type CookieStore, type CookieOptions } from "../types/cookies";
 
-function normalizeOptions(options: CookieOptions): ExpressCookieOptions {
+interface ExpressCookieReadOptions {
+  signed?: boolean;
+}
+
+type ExpressCookieSetOptions = CookieOptions & {
+  httpOnly?: boolean;
+  signed?: boolean;
+};
+
+export interface ExpressCookieStore extends CookieStore {
+  get(
+    name: string,
+    options?: ExpressCookieReadOptions,
+  ): Promise<string | undefined>;
+  set(
+    name: string,
+    value: string,
+    options?: ExpressCookieSetOptions,
+  ): Promise<void>;
+  delete(name: string, options?: ExpressCookieSetOptions): Promise<void>;
+  getAll(options?: ExpressCookieReadOptions): Promise<Record<string, string>>;
+}
+
+function normalizeSetOptions(options: ExpressCookieSetOptions) {
   const now = Date.now();
 
   const expires =
@@ -19,7 +42,7 @@ function normalizeOptions(options: CookieOptions): ExpressCookieOptions {
       ? Math.max(0, Math.floor(options.expires.getTime() - now))
       : options.maxAge;
 
-  const result: Partial<CookieOptions> = {};
+  const result: Partial<ExpressCookieOptions> = {};
 
   if (options.path) result.path = options.path;
   if (options.domain) result.domain = options.domain;
@@ -27,6 +50,7 @@ function normalizeOptions(options: CookieOptions): ExpressCookieOptions {
   if (options.partitioned) result.partitioned = options.partitioned;
   if (options.secure) result.secure = options.secure;
   if (options.httpOnly) result.httpOnly = options.httpOnly;
+  if (options.signed !== undefined) result.signed = options.signed;
   if (expires !== undefined) result.expires = expires;
   if (maxAge !== undefined) result.maxAge = maxAge;
 
@@ -36,18 +60,21 @@ function normalizeOptions(options: CookieOptions): ExpressCookieOptions {
 export function createExpressCookieStore(
   request: Request,
   response: Response,
-): CookieStore {
+): ExpressCookieStore {
   const defaultOptions = {
     path: "/",
-  } satisfies CookieOptions;
+  } satisfies ExpressCookieSetOptions;
 
   return {
-    async get(name) {
+    async get(name, { signed }: ExpressCookieReadOptions = {}) {
+      if (signed) {
+        return request.signedCookies[name];
+      }
       return request.cookies[name];
     },
 
     async set(name, value, optionsOverride) {
-      const options = normalizeOptions({
+      const options = normalizeSetOptions({
         ...defaultOptions,
         ...optionsOverride,
       });
@@ -56,12 +83,19 @@ export function createExpressCookieStore(
     },
 
     async delete(name, optionsOverride) {
-      const options = normalizeOptions({
+      const options = normalizeSetOptions({
         ...defaultOptions,
         ...optionsOverride,
       });
 
       response.clearCookie(name, options);
+    },
+
+    async getAll({ signed }: ExpressCookieReadOptions = {}) {
+      if (signed) {
+        return request.signedCookies;
+      }
+      return request.cookies;
     },
   };
 }

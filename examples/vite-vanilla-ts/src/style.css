@@ -98,7 +98,7 @@ code {
   background: var(--code-bg);
 }
 
-.counter {
+.highlight {
   font-size: 16px;
   padding: 5px 10px;
   border-radius: 5px;

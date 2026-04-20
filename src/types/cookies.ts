@@ -8,14 +8,11 @@ export interface CookieOptions {
   sameSite?: "strict" | "lax" | "none";
   partitioned?: boolean;
   secure?: boolean;
-  httpOnly?: boolean;
 }
 
 export interface CookieStore {
   get(name: string): Promise<string | undefined>;
   set(name: string, value: string, options?: CookieOptions): Promise<void>;
   delete(name: string, options?: CookieOptions): Promise<void>;
-  getAll?(): Promise<Record<string, string>>;
-  subscribeChange?(listener: (event: CookieChangeEvent) => void): void;
-  unsubscribeChange?(listener: (event: CookieChangeEvent) => void): void;
+  getAll(): Promise<Record<string, string>>;
 }

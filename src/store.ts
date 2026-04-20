@@ -1,16 +1,33 @@
 import { Request, Response } from "express";
 
+import { type BrowserCookieStore } from "./adapters/browser";
+import { type ExpressCookieStore } from "./adapters/express";
+import { type NextCookieStore } from "./adapters/next";
+
 type Adapter = "browser" | "express" | "next";
 
-type Context<T> = T extends "express"
-  ? [request: Request, response: Response]
-  : [];
-
-export function createCookieStore<T extends Adapter>({
+export function createCookieStore({
   adapter,
 }: {
-  adapter: T;
-}) {
+  adapter: "browser";
+}): () => Promise<BrowserCookieStore>;
+
+// eslint-disable-next-line no-redeclare
+export function createCookieStore({
+  adapter,
+}: {
+  adapter: "next";
+}): () => Promise<NextCookieStore>;
+
+// eslint-disable-next-line no-redeclare
+export function createCookieStore({
+  adapter,
+}: {
+  adapter: "express";
+}): (request: Request, response: Response) => Promise<ExpressCookieStore>;
+
+// eslint-disable-next-line no-redeclare
+export function createCookieStore({ adapter }: { adapter: Adapter }) {
   switch (adapter) {
     case "browser": {
       return async () => {
@@ -27,7 +44,7 @@ export function createCookieStore<T extends Adapter>({
     }
 
     case "express": {
-      return async (...context: Context<T>) => {
+      return async (...context: [request: Request, response: Response]) => {
         if (!context?.length) {
           throw new Error("Express requires { request, response } context");
         }
