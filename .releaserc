@@ -2,7 +2,7 @@
   "branches": [
     "master"
   ],
-  "repositoryUrl": "https://github.com/msobiecki/react-marauders-path",
+  "repositoryUrl": "https://github.com/msobiecki/cookie-store",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
