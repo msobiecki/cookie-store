@@ -20,6 +20,12 @@ If you use the Express adapter, also install cookie-parser:
 npm install cookie-parser
 ```
 
+To read/write signed cookies in Express, initialize cookie-parser with a secret:
+
+```ts
+app.use(cookieParser("your-secret"));
+```
+
 ## Quick Start
 
 ### Browser
@@ -47,7 +53,7 @@ import cookieParser from "cookie-parser";
 import { createCookieStore } from "@msobiecki/cookie-store";
 
 const app = express();
-app.use(cookieParser());
+app.use(cookieParser("your-secret"));
 
 const getCookieStore = createCookieStore({ adapter: "express" });
 
@@ -57,10 +63,13 @@ app.post("/theme", async (request, response) => {
   await cookieStore.set("theme", "dark", {
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
+    signed: true,
     path: "/",
   });
 
-  response.json({ ok: true });
+  const signedTheme = await cookieStore.get("theme", { signed: true });
+
+  response.json({ ok: true, signedTheme });
 });
 ```
 
@@ -134,6 +143,12 @@ Returns an async function:
 - next: call with no arguments.
 - express: call with request and response.
 
+TypeScript overloads return adapter-specific stores:
+
+- browser -> BrowserCookieStore
+- next -> NextCookieStore
+- express -> ExpressCookieStore
+
 ### CookieStore
 
 ```ts
@@ -141,15 +156,13 @@ interface CookieStore {
   get(name: string): Promise<string | undefined>;
   set(name: string, value: string, options?: CookieOptions): Promise<void>;
   delete(name: string, options?: CookieOptions): Promise<void>;
-  getAll?(): Promise<Record<string, string>>;
-  subscribeChange?(listener: (event: CookieChangeEvent) => void): void;
-  unsubscribeChange?(listener: (event: CookieChangeEvent) => void): void;
+  getAll(): Promise<Record<string, string>>;
 }
 ```
 
 Notes:
 
-- getAll and change listeners are browser-focused capabilities.
+- Browser adapter adds change listeners via subscribeChange and unsubscribeChange.
 - Browser adapter uses the Cookie Store API when available and falls back to document.cookie.
 
 ### CookieOptions
@@ -163,11 +176,44 @@ interface CookieOptions {
   sameSite?: "strict" | "lax" | "none";
   partitioned?: boolean;
   secure?: boolean;
-  httpOnly?: boolean;
 }
 ```
 
 maxAge is in milliseconds.
+
+### Express Adapter Options
+
+ExpressCookieStore extends the base store with signed-cookie reads and writes.
+
+```ts
+type ExpressCookieReadOptions = {
+  signed?: boolean;
+};
+
+type ExpressCookieSetOptions = CookieOptions & {
+  httpOnly?: boolean;
+  signed?: boolean;
+};
+```
+
+Usage:
+
+```ts
+await cookieStore.set("session", "abc", { signed: true, httpOnly: true });
+const session = await cookieStore.get("session", { signed: true });
+const allSigned = await cookieStore.getAll({ signed: true });
+```
+
+### Next Adapter Options
+
+NextCookieStore supports extra options accepted by next/headers cookies API:
+
+```ts
+type NextCookieOptions = CookieOptions & {
+  httpOnly?: boolean;
+  priority?: "low" | "medium" | "high";
+};
+```
 
 ## Exports
 

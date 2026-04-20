@@ -2,8 +2,17 @@
   "name": "@msobiecki/cookie-store",
   "version": "1.0.0",
   "private": false,
-  "description": "",
-  "keywords": [],
+  "description": "Typed cookie store API for browser, Express, and Next.js with React hooks support.",
+  "keywords": [
+    "cookie",
+    "cookies",
+    "cookie-store",
+    "browser",
+    "express",
+    "next",
+    "react",
+    "typescript"
+  ],
   "homepage": "https://github.com/msobiecki/cookie-store",
   "bugs": {
     "url": "https://github.com/msobiecki/cookie-store/issues"
