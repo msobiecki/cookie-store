@@ -79,7 +79,7 @@ export const CookieProvider = ({
   }, []);
 
   useEffect(() => {
-    if (!("cookieStore" in globalThis)) {
+    if (!cookieStore) {
       return undefined;
     }
 
@@ -109,12 +109,14 @@ export const CookieProvider = ({
       });
     };
 
-    globalThis.cookieStore.addEventListener("change", handler);
+    // eslint-disable-next-line compat/compat
+    cookieStore.subscribeChange?.(handler);
 
     return () => {
-      globalThis.cookieStore.removeEventListener("change", handler);
+      // eslint-disable-next-line compat/compat
+      cookieStore.unsubscribeChange?.(handler);
     };
-  }, []);
+  }, [cookieStore]);
 
   return (
     <CookieContext.Provider value={{ cookies, get, set, remove }}>

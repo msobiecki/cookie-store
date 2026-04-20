@@ -181,5 +181,27 @@ export function createBrowserCookieStore(): CookieStore {
 
       return parseDocumentCookies();
     },
+
+    subscribeChange(listener) {
+      if (!hasCookieStore()) {
+        console.warn(
+          "cookieStore API not supported, change listener won't work",
+        );
+        return;
+      }
+
+      globalThis.cookieStore.addEventListener("change", listener);
+    },
+
+    unsubscribeChange(listener) {
+      if (!hasCookieStore()) {
+        console.warn(
+          "cookieStore API not supported, change listener won't work",
+        );
+        return;
+      }
+
+      globalThis.cookieStore.removeEventListener("change", listener);
+    },
   };
 }
