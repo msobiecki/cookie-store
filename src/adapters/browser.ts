@@ -25,16 +25,19 @@ function normalizeOptions(options: CookieOptions) {
     maxAge = options.maxAge / 1000;
   }
 
-  return {
-    path: options.path,
-    domain: options.domain,
-    sameSite: options.sameSite,
-    partitioned: options.partitioned,
-    secure: options.secure,
-    httpOnly: options.httpOnly,
-    expires,
-    maxAge,
-  };
+  const result: Partial<Omit<CookieOptions, "expires"> & { expires?: number }> =
+    {};
+
+  if (options.path) result.path = options.path;
+  if (options.domain) result.domain = options.domain;
+  if (options.sameSite) result.sameSite = options.sameSite;
+  if (options.partitioned) result.partitioned = options.partitioned;
+  if (options.secure) result.secure = options.secure;
+  if (options.httpOnly) result.httpOnly = options.httpOnly;
+  if (expires !== undefined) result.expires = expires;
+  if (maxAge !== undefined) result.maxAge = maxAge;
+
+  return result;
 }
 
 function parseDocumentCookies(): Record<string, string> {
@@ -84,7 +87,6 @@ export function createBrowserCookieStore(): CookieStore {
         ...optionsOverride,
       });
 
-      console.log("Setting cookie:", { name, value, options });
       if (hasCookieStore()) {
         try {
           await globalThis.cookieStore.set({

@@ -5,13 +5,12 @@ import {
   type ReactNode,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 
-import { createBrowserCookieStore } from "../adapters";
+import { type CookieStore, type CookieOptions } from "../types/cookies";
 
-import { type CookieOptions } from "../types/cookies";
+import { createCookieStore } from "../store";
 
 type CookieState = Record<string, string | undefined>;
 
@@ -24,6 +23,8 @@ export interface CookieContextValue {
 
 export const CookieContext = createContext<CookieContextValue | null>(null);
 
+const getCookieStore = createCookieStore({ adapter: "browser" });
+
 export const CookieProvider = ({
   children,
   initialCookies = {},
@@ -31,14 +32,16 @@ export const CookieProvider = ({
   children: ReactNode;
   initialCookies?: Record<string, string>;
 }) => {
-  const cookieStore = useMemo(() => createBrowserCookieStore(), []);
-
+  const [cookieStore, setCookieStore] = useState<CookieStore | null>(null);
   const [cookies, setCookies] = useState<CookieState>(initialCookies);
 
   const get = useCallback((name: string) => cookies[name], [cookies]);
 
   const set = useCallback(
     async (name: string, value: string, options?: CookieOptions) => {
+      if (!cookieStore) return;
+
+      // eslint-disable-next-line compat/compat
       await cookieStore.set(name, value, options);
 
       setCookies((previous) => ({
@@ -51,6 +54,9 @@ export const CookieProvider = ({
 
   const remove = useCallback(
     async (name: string, options?: CookieOptions) => {
+      if (!cookieStore) return;
+
+      // eslint-disable-next-line compat/compat
       await cookieStore.delete(name, options);
 
       setCookies((previous) => {
@@ -64,10 +70,13 @@ export const CookieProvider = ({
 
   useEffect(() => {
     (async () => {
-      const all = await cookieStore.getAll?.();
+      const store = await getCookieStore();
+      setCookieStore(store);
+
+      const all = await store.getAll?.();
       if (all) setCookies(all);
     })();
-  }, [cookieStore]);
+  }, []);
 
   useEffect(() => {
     if (!("cookieStore" in globalThis)) {

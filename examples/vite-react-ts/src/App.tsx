@@ -7,19 +7,17 @@ import heroImg from "./assets/hero.png";
 import "./App.css";
 
 function App() {
-  const [themeCookie, setThemeCookie, removeThemeCookie] = useCookie("theme", {
+  const [theme, setTheme, removeTheme] = useCookie("theme", {
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   });
 
-  console.log("Theme cookie:", themeCookie);
-
   const handleThemeChange = useCallback(() => {
-    setThemeCookie(themeCookie === "light" ? "dark" : "light");
-  }, [themeCookie, setThemeCookie]);
+    setTheme(theme === "light" ? "dark" : "light");
+  }, [theme, setTheme]);
 
   const handleThemeRemove = useCallback(() => {
-    removeThemeCookie();
-  }, [removeThemeCookie]);
+    removeTheme();
+  }, [removeTheme]);
 
   return (
     <>
@@ -36,7 +34,7 @@ function App() {
           </p>
         </div>
         <button className="highlight" onClick={handleThemeChange}>
-          Theme is {themeCookie || "not set"}
+          Theme is {theme || "not set"}
         </button>
 
         <button className="highlight" onClick={handleThemeRemove}>

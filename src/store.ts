@@ -4,7 +4,7 @@ type Adapter = "browser" | "express" | "next";
 
 type Context<T> = T extends "express"
   ? [request: Request, response: Response]
-  : never;
+  : [];
 
 export function createCookieStore<T extends Adapter>({
   adapter,
@@ -28,7 +28,7 @@ export function createCookieStore<T extends Adapter>({
 
     case "express": {
       return async (...context: Context<T>) => {
-        if (!adapter) {
+        if (!context?.length) {
           throw new Error("Express requires { request, response } context");
         }
 

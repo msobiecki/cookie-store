@@ -4,10 +4,10 @@ import { useMemo, useCallback } from "react";
 
 import { type CookieOptions } from "../types/cookies";
 
-import { useCookies } from "./use-cookies";
+import { useCookieContext } from "../providers/use-cookie-context";
 
 export function useCookie(name: string, options?: CookieOptions) {
-  const { get, set, remove } = useCookies();
+  const { get, set, remove } = useCookieContext();
 
   const value = useMemo(() => get(name), [name, get]);
 

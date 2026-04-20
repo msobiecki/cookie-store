@@ -19,15 +19,18 @@ function normalizeOptions(options: CookieOptions): ExpressCookieOptions {
       ? Math.max(0, Math.floor(options.expires.getTime() - now))
       : options.maxAge;
 
-  return {
-    path: options.path,
-    domain: options.domain,
-    sameSite: options.sameSite,
-    secure: options.secure,
-    httpOnly: options.httpOnly,
-    expires,
-    maxAge,
-  };
+  const result: Partial<CookieOptions> = {};
+
+  if (options.path) result.path = options.path;
+  if (options.domain) result.domain = options.domain;
+  if (options.sameSite) result.sameSite = options.sameSite;
+  if (options.partitioned) result.partitioned = options.partitioned;
+  if (options.secure) result.secure = options.secure;
+  if (options.httpOnly) result.httpOnly = options.httpOnly;
+  if (expires !== undefined) result.expires = expires;
+  if (maxAge !== undefined) result.maxAge = maxAge;
+
+  return result;
 }
 
 export function createExpressCookieStore(
