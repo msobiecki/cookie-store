@@ -227,15 +227,6 @@ export { useCookie, useCookies };
 export { CookieProvider };
 ```
 
-## Development
-
-```bash
-npm install
-npm run build
-npm run test
-npm run lint
-```
-
 ## Examples
 
 Runnable examples are included in:
@@ -244,6 +235,26 @@ Runnable examples are included in:
 - examples/vite-react-ts
 - examples/vite-vanilla-ts
 
+## Development
+
+### Build
+
+```bash
+npm run build
+```
+
+### Watch Mode
+
+```bash
+npm run dev
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
 ## License
 
-MIT
+See [LICENSE](./LICENSE) file for details.
