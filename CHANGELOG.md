@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/msobiecki/cookie-store/compare/v1.1.0...v1.2.0) (2026-04-22)
+
+
+### Features
+
+* clean config ([5a9a22c](https://github.com/msobiecki/cookie-store/commit/5a9a22c61495c45210304a9e03ff860af9e795b8))
+
 # [1.1.0](https://github.com/msobiecki/cookie-store/compare/v1.0.0...v1.1.0) (2026-04-22)
 
 
