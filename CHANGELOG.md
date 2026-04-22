@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/msobiecki/cookie-store/compare/v1.4.0...v1.5.0) (2026-04-22)
+
+
+### Features
+
+* improve cookie store ([eb34536](https://github.com/msobiecki/cookie-store/commit/eb3453632b0ed2b7a5707e5473fefba2be9a6ddc))
+
 # [1.4.0](https://github.com/msobiecki/cookie-store/compare/v1.3.0...v1.4.0) (2026-04-22)
 
 
