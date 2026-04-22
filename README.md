@@ -103,7 +103,11 @@ Use CookieProvider in client components and read/update values with hooks.
 ```tsx
 "use client";
 
-import { CookieProvider, useCookie, useCookies } from "@msobiecki/cookie-store";
+import {
+  CookieProvider,
+  useCookie,
+  useCookies,
+} from "@msobiecki/cookie-store/client";
 
 function ThemeControls() {
   const [theme, setTheme, removeTheme] = useCookie("theme", {
