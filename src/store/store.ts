@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import { type BrowserCookieStore } from "./adapters/browser";
-import { type ExpressCookieStore } from "./adapters/express";
-import { type NextCookieStore } from "./adapters/next";
+import { type BrowserCookieStore } from "../adapters/browser";
+import { type ExpressCookieStore } from "../adapters/express";
+import { type NextCookieStore } from "../adapters/next";
 
 type Adapter = "browser" | "express" | "next";
 
@@ -31,14 +31,15 @@ export function createCookieStore({ adapter }: { adapter: Adapter }) {
   switch (adapter) {
     case "browser": {
       return async () => {
-        const { createBrowserCookieStore } = await import("./adapters/browser");
+        const { createBrowserCookieStore } =
+          await import("../adapters/browser");
         return createBrowserCookieStore();
       };
     }
 
     case "next": {
       return async () => {
-        const { createNextCookieStore } = await import("./adapters/next");
+        const { createNextCookieStore } = await import("../adapters/next");
         return createNextCookieStore();
       };
     }
@@ -49,7 +50,8 @@ export function createCookieStore({ adapter }: { adapter: Adapter }) {
           throw new Error("Express requires { request, response } context");
         }
 
-        const { createExpressCookieStore } = await import("./adapters/express");
+        const { createExpressCookieStore } =
+          await import("../adapters/express");
         const [request, response] = context;
 
         return createExpressCookieStore(request, response);

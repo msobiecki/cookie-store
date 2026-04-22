@@ -1,5 +1,5 @@
 import { type ComponentType, useCallback } from "react";
-import { CookieProvider, useCookie } from "@msobiecki/cookie-store";
+import { CookieProvider, useCookie } from "@msobiecki/cookie-store/client";
 
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";

@@ -13,7 +13,10 @@ export default defineConfig(({ mode }) => {
     ],
     build: {
       lib: {
-        entry: "src/index.ts",
+        entry: {
+          index: "src/index.ts",
+          client: "src/client.ts",
+        },
         formats: ["es"],
       },
       sourcemap: !isProduction,
