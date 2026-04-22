@@ -9,8 +9,9 @@ import {
 } from "react";
 
 import { type CookieOptions } from "../types/cookies";
-
 import { createCookieStore } from "../store";
+
+import { BrowserCookieStore } from "../adapters/browser";
 
 type CookieState = Record<string, string | undefined>;
 
@@ -23,8 +24,6 @@ export interface CookieContextValue {
 
 export const CookieContext = createContext<CookieContextValue | null>(null);
 
-const getCookieStore = createCookieStore({ adapter: "browser" });
-
 export const CookieProvider = ({
   children,
   initialCookies = {},
@@ -32,9 +31,9 @@ export const CookieProvider = ({
   children: ReactNode;
   initialCookies?: Record<string, string>;
 }) => {
-  const [cookieStore, setCookieStore] = useState<Awaited<
-    ReturnType<typeof getCookieStore>
-  > | null>(null);
+  const [cookieStore, setCookieStore] = useState<BrowserCookieStore | null>(
+    null,
+  );
   const [cookies, setCookies] = useState<CookieState>(initialCookies);
 
   const get = useCallback((name: string) => cookies[name], [cookies]);
@@ -71,13 +70,27 @@ export const CookieProvider = ({
   );
 
   useEffect(() => {
-    (async () => {
+    let cancelled = false;
+
+    const init = async () => {
+      const getCookieStore = createCookieStore({ adapter: "browser" });
       const store = await getCookieStore();
+
+      if (cancelled) return;
+
       setCookieStore(store);
 
       const all = await store.getAll?.();
-      if (all) setCookies(all);
-    })();
+      if (all && !cancelled) {
+        setCookies(all);
+      }
+    };
+
+    init();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -86,6 +99,7 @@ export const CookieProvider = ({
     }
 
     const handler = (event: CookieChangeEvent) => {
+      console.log("Cookie change event:", event);
       setCookies((previous) => {
         let next: CookieState = { ...previous };
 
@@ -121,7 +135,14 @@ export const CookieProvider = ({
   }, [cookieStore]);
 
   return (
-    <CookieContext.Provider value={{ cookies, get, set, remove }}>
+    <CookieContext.Provider
+      value={{
+        cookies,
+        get,
+        set,
+        remove,
+      }}
+    >
       {children}
     </CookieContext.Provider>
   );
