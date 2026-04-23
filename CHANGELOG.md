@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/msobiecki/cookie-store/compare/v1.5.0...v1.6.0) (2026-04-23)
+
+
+### Features
+
+* update github actions ([1efde7f](https://github.com/msobiecki/cookie-store/commit/1efde7f1cc38accb1bcfedfaee3838266c78cb07))
+
 # [1.5.0](https://github.com/msobiecki/cookie-store/compare/v1.4.0...v1.5.0) (2026-04-22)
 
 
