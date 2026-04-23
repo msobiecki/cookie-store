@@ -1,7 +1,7 @@
 import {
   type Request,
   type Response,
-  CookieOptions as ExpressCookieOptions,
+  type CookieOptions as ExpressCookieOptions,
 } from "express";
 
 import { type CookieStore, type CookieOptions } from "../types/cookies";

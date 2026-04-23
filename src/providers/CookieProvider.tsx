@@ -11,7 +11,7 @@ import {
 import { type CookieOptions } from "../types/cookies";
 import { createCookieStore } from "../store";
 
-import { BrowserCookieStore } from "../adapters/browser";
+import { type BrowserCookieStore } from "../adapters/browser";
 
 type CookieState = Record<string, string | undefined>;
 

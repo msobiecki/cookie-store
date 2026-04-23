@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { type Request, type Response } from "express";
 
 import { type BrowserCookieStore } from "../adapters/browser";
 import { type ExpressCookieStore } from "../adapters/express";
