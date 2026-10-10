@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@anolilab/multi-semantic-release": "^4.1.1",
-    "@commitlint/cli": "^20.4.2",
+    "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^20.4.2",
     "@msobiecki/eslint-config": "^9.16.0",
     "@semantic-release/changelog": "^6.0.3",
